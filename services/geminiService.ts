@@ -6,9 +6,7 @@ export class GeminiService {
   private ai: GoogleGenAI;
 
   constructor() {
-this.ai = new GoogleGenAI({
-  apiKey: 'AIzaSyABBaEgykQP4Db-HvZ_7n411uEKPgeisd8'
-});
+    this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
   }
 
   async generateQuiz(config: QuizConfig): Promise<Question[]> {
