@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { Question, QuizConfig } from "../types";
 
@@ -6,7 +5,13 @@ export class GeminiService {
   private ai: GoogleGenAI;
 
   constructor() {
-    this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+    // Use Vite environment variable
+    const apiKey = "AIzaSyABBaEgykQP4Db-HvZ_7n411uEKPgeisd8";
+    if (!apiKey) {
+      throw new Error("VITE_GEMINI_API_KEY is not set in environment variables!");
+    }
+
+    this.ai = new GoogleGenAI({ apiKey });
   }
 
   async generateQuiz(config: QuizConfig): Promise<Question[]> {
@@ -25,17 +30,14 @@ export class GeminiService {
             properties: {
               id: { type: Type.STRING },
               question: { type: Type.STRING },
-              options: {
-                type: Type.ARRAY,
-                items: { type: Type.STRING }
-              },
+              options: { type: Type.ARRAY, items: { type: Type.STRING } },
               correctAnswerIndex: { type: Type.INTEGER },
-              explanation: { type: Type.STRING }
+              explanation: { type: Type.STRING },
             },
-            required: ["id", "question", "options", "correctAnswerIndex", "explanation"]
-          }
-        }
-      }
+            required: ["id", "question", "options", "correctAnswerIndex", "explanation"],
+          },
+        },
+      },
     });
 
     try {
@@ -51,7 +53,7 @@ export class GeminiService {
     const prompt = `The user scored ${score} out of ${total} on a quiz about "${topic}". Provide a very short, encouraging, and witty piece of feedback (max 2 sentences).`;
     const response = await this.ai.models.generateContent({
       model: "gemini-3-flash-preview",
-      contents: prompt
+      contents: prompt,
     });
     return response.text || "Great job!";
   }
