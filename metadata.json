@@ -1,0 +1,5 @@
+{
+  "name": "GenQuiz AI",
+  "description": "A high-performance, AI-powered quiz platform that generates custom assessments on any topic using Gemini 3 Flash. Features include real-time feedback, category selection, and detailed explanations.",
+  "requestFramePermissions": []
+}
